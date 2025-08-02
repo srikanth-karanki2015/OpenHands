@@ -14,6 +14,13 @@ class ServerConfig(ServerConfigInterface):
     hide_llm_settings = os.environ.get('HIDE_LLM_SETTINGS', 'false') == 'true'
     # This config is used to hide the microagent management page from the users for now. We will remove this once we release the new microagent management page.
     hide_microagent_management = True
+
+    # Webhook configuration
+    webhook_secret = os.environ.get('WEBHOOK_SECRET', '')
+    webhook_allowed_repositories = os.environ.get('WEBHOOK_ALLOWED_REPOS', '').split(
+        ','
+    )
+    webhook_auto_fix = os.environ.get('WEBHOOK_AUTO_FIX', 'false') == 'true'
     settings_store_class: str = (
         'openhands.storage.settings.file_settings_store.FileSettingsStore'
     )
@@ -45,6 +52,11 @@ class ServerConfig(ServerConfigInterface):
                 'ENABLE_BILLING': self.enable_billing,
                 'HIDE_LLM_SETTINGS': self.hide_llm_settings,
                 'HIDE_MICROAGENT_MANAGEMENT': self.hide_microagent_management,
+            },
+            'WEBHOOK_CONFIG': {
+                'SECRET': self.webhook_secret,
+                'ALLOWED_REPOSITORIES': self.webhook_allowed_repositories,
+                'AUTO_FIX': self.webhook_auto_fix,
             },
         }
 
